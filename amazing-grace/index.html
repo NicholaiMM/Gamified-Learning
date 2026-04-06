@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazing Grace Home Living — Rooms for Rent in Largo &amp; Florida</title>
+  <meta name="description" content="Amazing Grace Home Living — comfortable, affordable rooms for rent in Largo and throughout Florida. Flexible terms, community-focused living." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f8f6f2;
+      --bg-card:   #ffffff;
+      --bg-dark:   #1a2a1a;
+      --accent:    #2e7d32;
+      --accent-lt: #4caf50;
+      --gold:      #c8960c;
+      --gold-lt:   #f5c842;
+      --text:      #2c2c2c;
+      --text-dim:  #6b7280;
+      --border:    #e0dbd3;
+      --radius:    12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.7;
+    }
+
+    /* ── Hero ──────────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #2a3d2a 100%);
+      color: #fff;
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(76,175,80,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #f5f0e8;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--gold-lt);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-location {
+      display: inline-block;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 999px;
+      padding: 0.35rem 1.1rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: #d4ecd4;
+    }
+
+    /* ── Arcade Button (cross-nav) ─────────────────────────────────── */
+    .arcade-banner {
+      background: var(--bg-dark);
+      text-align: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .arcade-btn {
+      display: inline-block;
+      padding: 0.65rem 1.8rem;
+      background: transparent;
+      border: 1.5px solid #39ff14;
+      border-radius: 6px;
+      color: #39ff14;
+      text-decoration: none;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px #39ff1433;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .arcade-btn::before { content: '🕹 '; }
+
+    .arcade-btn:hover {
+      background: rgba(57,255,20,0.08);
+      box-shadow: 0 0 24px #39ff1466;
+    }
+
+    /* ── Container ─────────────────────────────────────────────────── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── Section headings ──────────────────────────────────────────── */
+    .section { padding: 3.5rem 0; }
+    .section + .section { border-top: 1px solid var(--border); }
+
+    .section-heading {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-sub {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    /* ── Room cards ────────────────────────────────────────────────── */
+    .room-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .room-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .room-card:hover {
+      box-shadow: 0 6px 20px rgba(46,125,50,0.12);
+      border-color: var(--accent-lt);
+    }
+
+    .room-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .room-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--bg-dark);
+    }
+
+    .room-price {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .room-location {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+    }
+
+    .room-features {
+      list-style: none;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .room-features li::before { content: '✓ '; color: var(--accent-lt); }
+
+    .room-badge {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'Courier New', monospace;
+    }
+
+    .room-badge--available { background: #e8f5e9; color: var(--accent); border: 1px solid #a5d6a7; }
+    .room-badge--soon      { background: #fff8e1; color: var(--gold);   border: 1px solid #ffe082; }
+
+    /* ── About ─────────────────────────────────────────────────────── */
+    .about-content {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 600px) { .about-content { grid-template-columns: 1fr; } }
+
+    .about-block h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--bg-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .about-block p { font-size: 0.88rem; color: var(--text-dim); }
+
+    /* ── Contact ───────────────────────────────────────────────────── */
+    .contact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      max-width: 520px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+
+    .contact-item:last-child { border-bottom: none; }
+
+    .contact-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+    .contact-label { color: var(--text-dim); font-size: 0.75rem; }
+    .contact-value { color: var(--bg-dark); font-weight: 600; }
+
+    /* ── Footer ───────────────────────────────────────────────────── */
+    footer {
+      background: var(--bg-dark);
+      color: #aaa;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.78rem;
+    }
+
+    footer a { color: var(--gold-lt); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ──────────────────────────────────────────────────────── -->
+  <header class="hero">
+    <span class="hero-icon" aria-hidden="true">🏡</span>
+    <h1>Amazing Grace Home Living</h1>
+    <p class="hero-tagline">"Where every room is a new beginning"</p>
+    <span class="hero-location">📍 Largo, FL &amp; Throughout Florida</span>
+  </header>
+
+  <!-- ── ARCADE CROSS-NAV ─────────────────────────────────────────── -->
+  <div class="arcade-banner" role="navigation" aria-label="Cross-site navigation">
+    <a href="../sovereign-os/index.html" class="arcade-btn">Educational Arcade — Gamified Learning</a>
+  </div>
+
+  <!-- ── AVAILABLE ROOMS ──────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="rooms-heading">
+    <div class="container">
+      <h2 class="section-heading" id="rooms-heading">Available Rooms</h2>
+      <p class="section-sub">Comfortable, flexible-term rentals in Largo and across Florida</p>
+      <div class="room-grid">
+
+        <article class="room-card">
+          <div class="room-header">
+            <div class="room-name">Private Room — Largo</div>
+            <div class="room-price">From $650/mo</div>
+          </div>
+          <div class="room-location">📍 Largo, FL 33770</div>
+          <ul class="room-features">
+            <li>Private furnished room</li>
+            <li>Shared kitchen &amp; common areas</li>
+            <li>High-speed Wi-Fi included</li>
+            <li>Utilities included</li>
+            <li>Month-to-month lease</li>
+          </ul>
+          <span class="room-badge room-badge--available">Available Now</span>
+        </article>
+
+        <article class="room-card">
+          <div class="room-header">
+            <div class="room-name">Studio Suite — Largo</div>
+            <div class="room-price">From $850/mo</div>
+          </div>
+          <div class="room-location">📍 Largo, FL 33771</div>
+          <ul class="room-features">
+            <li>Private entrance</li>
+            <li>Mini-kitchen / kitchenette</li>
+            <li>In-unit or shared laundry</li>
+            <li>Parking included</li>
+            <li>Short-term &amp; long-term options</li>
+          </ul>
+          <span class="room-badge room-badge--available">Available Now</span>
+        </article>
+
+        <article class="room-card">
+          <div class="room-header">
+            <div class="room-name">Room — Clearwater Area</div>
+            <div class="room-price">From $700/mo</div>
+          </div>
+          <div class="room-location">📍 Clearwater, FL (Pinellas County)</div>
+          <ul class="room-features">
+            <li>Quiet residential neighborhood</li>
+            <li>Shared full kitchen</li>
+            <li>Utilities included</li>
+            <li>Pet-friendly (small pets)</li>
+            <li>Near transit routes</li>
+          </ul>
+          <span class="room-badge room-badge--soon">Coming Soon</span>
+        </article>
+
+        <article class="room-card">
+          <div class="room-header">
+            <div class="room-name">Remote Room — Central Florida</div>
+            <div class="room-price">From $600/mo</div>
+          </div>
+          <div class="room-location">📍 Central Florida (Multiple Cities)</div>
+          <ul class="room-features">
+            <li>Statewide partner network</li>
+            <li>Background-check tenants</li>
+            <li>Flexible lease start dates</li>
+            <li>Online application &amp; payment</li>
+            <li>24-hr contact support</li>
+          </ul>
+          <span class="room-badge room-badge--soon">Inquire Now</span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ──────────────────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="about-heading">
+    <div class="container">
+      <h2 class="section-heading" id="about-heading">About Amazing Grace Home Living</h2>
+      <p class="section-sub">Community-focused housing for working adults across Florida</p>
+      <div class="about-content">
+        <div class="about-block">
+          <h3>Our Mission</h3>
+          <p>
+            Amazing Grace Home Living provides safe, clean, and affordable
+            housing options for individuals and families seeking stability
+            in Largo and across the state of Florida. We believe a good
+            home is the foundation for a better life.
+          </p>
+        </div>
+        <div class="about-block">
+          <h3>Why Choose Us</h3>
+          <p>
+            Flexible month-to-month terms, all-inclusive pricing (utilities
+            &amp; Wi-Fi), and a vetted community of respectful housemates.
+            No hidden fees. Transparent applications. Real support.
+          </p>
+        </div>
+        <div class="about-block">
+          <h3>Service Areas</h3>
+          <p>
+            Currently serving Largo, Clearwater, St. Petersburg, and
+            expanding throughout Pinellas, Hillsborough, and Orange counties.
+            Central Florida placements available through our partner network.
+          </p>
+        </div>
+        <div class="about-block">
+          <h3>Application Process</h3>
+          <p>
+            Simple three-step process: submit inquiry → complete background
+            screening → sign lease &amp; move in. Most applications processed
+            within 48 hours.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ────────────────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="contact-heading">
+    <div class="container">
+      <h2 class="section-heading" id="contact-heading">Contact Us</h2>
+      <p class="section-sub">Ready to find your next home? Reach out today.</p>
+      <div class="contact-card">
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <div>
+            <div class="contact-label">Primary Location</div>
+            <div class="contact-value">Largo, Florida 33770</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🌐</span>
+          <div>
+            <div class="contact-label">Service Area</div>
+            <div class="contact-value">Pinellas County &amp; Statewide Florida</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📋</span>
+          <div>
+            <div class="contact-label">Availability</div>
+            <div class="contact-value">Rooms Available Now — Apply Anytime</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+  <footer>
+    <p>&copy; 2026 Amazing Grace Home Living · Largo, Florida</p>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="../index.html">Gamified Learning Home</a>
+      <a href="../sovereign-os/index.html">🕹 Educational Arcade</a>
+    </nav>
+  </footer>
+
+</body>
+</html>
