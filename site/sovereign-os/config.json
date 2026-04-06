@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "schema_version": "1.0.0",
+    "generated": "2026-04-06",
+    "engine": "Sovereign OS Deployment Engine"
+  },
+  "identity": {
+    "handle": "Guardian 82",
+    "role": "Sovereign Efficiency Architect",
+    "relocation_target": "Bakersfield",
+    "bio": "Systems-oriented operator specializing in automation architecture, deployment pipelines, and gamified learning infrastructure. Engineering-centric. Precision-focused.",
+    "tags": ["automation", "deployment", "google-apps-script", "google-sites", "gamified-learning"]
+  },
+  "constellation_nodes": [
+    {
+      "id": "tampa-hq",
+      "label": "Tampa HQ",
+      "type": "hub",
+      "purpose": "Primary origin point / home shard",
+      "coords": { "x": 0.50, "y": 0.50 }
+    },
+    {
+      "id": "matrix-shard",
+      "label": "Matrix Shard",
+      "type": "game",
+      "purpose": "Arcade engine module",
+      "coords": { "x": 0.28, "y": 0.30 }
+    },
+    {
+      "id": "neon-leap",
+      "label": "Neon Leap",
+      "type": "game",
+      "purpose": "Secondary game module",
+      "coords": { "x": 0.72, "y": 0.28 }
+    },
+    {
+      "id": "seven-stars",
+      "label": "Seven Stars",
+      "type": "mystery",
+      "purpose": "Narrative anchor / lore node",
+      "coords": { "x": 0.50, "y": 0.75 }
+    },
+    {
+      "id": "manilla-b06",
+      "label": "Manilla B06",
+      "type": "hub",
+      "purpose": "Remote operations gateway",
+      "coords": { "x": 0.82, "y": 0.62 }
+    }
+  ],
+  "constellation_edges": [
+    { "from": "tampa-hq", "to": "matrix-shard" },
+    { "from": "tampa-hq", "to": "neon-leap" },
+    { "from": "tampa-hq", "to": "seven-stars" },
+    { "from": "tampa-hq", "to": "manilla-b06" },
+    { "from": "matrix-shard", "to": "neon-leap" },
+    { "from": "neon-leap", "to": "manilla-b06" }
+  ],
+  "devops_spine": [
+    {
+      "tool": "Apps Script",
+      "role": "Automation logic",
+      "status": "active"
+    },
+    {
+      "tool": "Google Sites",
+      "role": "UI architecture",
+      "status": "active"
+    },
+    {
+      "tool": "Admin Toolbox",
+      "role": "Diagnostics",
+      "status": "active"
+    },
+    {
+      "tool": "Master Shard",
+      "role": "Resume master document",
+      "status": "active"
+    }
+  ],
+  "incident_ledger": [
+    {
+      "id": "FI-RED",
+      "status": "Bypassed",
+      "severity": "high",
+      "description": "Google Fi redirect loop detected. Legacy routing purged.",
+      "resolution": "Legacy routing table cleared; direct path restored."
+    }
+  ]
+}

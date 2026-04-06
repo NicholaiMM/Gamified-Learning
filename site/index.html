@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gamified Learning</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0a0c12;
+      --bg-panel:    #10131f;
+      --bg-card:     #161b2e;
+      --border:      #1e2a45;
+      --neon-cyan:   #00f5ff;
+      --neon-purple: #b24bff;
+      --neon-green:  #39ff14;
+      --neon-amber:  #ffaa00;
+      --text:        #c9d4e8;
+      --text-dim:    #5a6a8a;
+      --radius:      10px;
+      --glow-cyan:   0 0 8px #00f5ff88, 0 0 24px #00f5ff44;
+      --glow-purple: 0 0 8px #b24bff88, 0 0 24px #b24bff44;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      text-align: center;
+      padding: 4rem 1rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #0d0f1a 0%, var(--bg) 100%);
+    }
+
+    .logo {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: var(--neon-cyan);
+      text-shadow: var(--glow-cyan);
+    }
+
+    .tagline {
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    main {
+      max-width: 900px;
+      width: 100%;
+      padding: 3rem 1.5rem;
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-shadow: var(--glow-cyan);
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .card-link {
+      margin-top: auto;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--neon-cyan);
+      border-radius: 6px;
+      color: var(--neon-cyan);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: background 0.2s;
+      align-self: flex-start;
+    }
+
+    .card-link:hover {
+      background: #00f5ff22;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">⬡ Gamified Learning</div>
+    <p class="tagline">Operator-grade education · Precision systems · Engineered growth</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <div class="card-title">Sovereign OS</div>
+      <p class="card-desc">Personal operator dashboard — constellation map, DevOps spine, identity profile, and incident ledger.</p>
+      <a class="card-link" href="sovereign-os/">Enter →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🎮</div>
+      <div class="card-title">Matrix Shard</div>
+      <p class="card-desc">Arcade-style learning module. Sharpen skills through structured challenge sequences.</p>
+      <span class="card-link" style="opacity:0.4;cursor:default;">Coming Soon</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">Neon Leap</div>
+      <p class="card-desc">Dynamic skill progression engine. Track achievements, level up, unlock advanced modules.</p>
+      <span class="card-link" style="opacity:0.4;cursor:default;">Coming Soon</span>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">✦</div>
+      <div class="card-title">Seven Stars</div>
+      <p class="card-desc">Narrative knowledge framework. Connect concepts through story-driven exploration.</p>
+      <span class="card-link" style="opacity:0.4;cursor:default;">Coming Soon</span>
+    </div>
+  </main>
+
+  <footer>gamifiedlearning.org · Guardian 82 · Sovereign Efficiency Architect</footer>
+</body>
+</html>
