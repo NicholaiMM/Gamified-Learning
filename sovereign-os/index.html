@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gamified Learning — Sovereign OS</title>
+  <meta name="description" content="Sovereign OS operator dashboard — Guardian 82, Sovereign Efficiency Architect." />
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0c12;
+      --bg-panel:  #10131f;
+      --bg-card:   #161b2e;
+      --border:    #1e2a45;
+      --neon-cyan: #00f5ff;
+      --neon-purple: #b24bff;
+      --neon-green: #39ff14;
+      --neon-amber: #ffaa00;
+      --text:      #c9d4e8;
+      --text-dim:  #5a6a8a;
+      --radius:    10px;
+      --glow-cyan: 0 0 8px #00f5ff88, 0 0 24px #00f5ff44;
+      --glow-purple: 0 0 8px #b24bff88, 0 0 24px #b24bff44;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      padding: 0 0 4rem;
+    }
+
+    /* ── Header ───────────────────────────────────────────────────────── */
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #0d0f1a 0%, var(--bg) 100%);
+    }
+
+    header .os-logo {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      color: var(--neon-cyan);
+      text-shadow: var(--glow-cyan);
+    }
+
+    header .os-sub {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* ── Layout ───────────────────────────────────────────────────────── */
+    .grid {
+      max-width: 1100px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.25rem;
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "profile   profile"
+        "map       map"
+        "devops    incidents";
+    }
+
+    @media (max-width: 680px) {
+      .grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "profile"
+          "map"
+          "devops"
+          "incidents";
+      }
+    }
+
+    /* ── Panel ────────────────────────────────────────────────────────── */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      overflow: hidden;
+    }
+
+    .panel-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      text-shadow: var(--glow-cyan);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .panel-title::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* ── Operator Profile ─────────────────────────────────────────────── */
+    #profile { grid-area: profile; }
+
+    .profile-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--neon-purple);
+      box-shadow: var(--glow-purple);
+      background: radial-gradient(circle at 35% 35%, #2a1a4e, #0a0c20);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .profile-meta { flex: 1; min-width: 200px; }
+
+    .profile-handle {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.05em;
+    }
+
+    .profile-role {
+      margin-top: 0.25rem;
+      font-size: 0.85rem;
+      color: var(--neon-purple);
+      text-shadow: var(--glow-purple);
+      letter-spacing: 0.1em;
+    }
+
+    .profile-reloc {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .profile-reloc span {
+      color: var(--neon-amber);
+    }
+
+    .profile-bio {
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: var(--text);
+      width: 100%;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      background: #0d1528;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Constellation Map ────────────────────────────────────────────── */
+    #map { grid-area: map; }
+
+    #constellation-svg {
+      width: 100%;
+      height: 320px;
+      display: block;
+      background: radial-gradient(ellipse at 50% 50%, #0e1630 0%, #080a14 100%);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .node-label {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      fill: #c9d4e8;
+      pointer-events: none;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── DevOps Spine ─────────────────────────────────────────────────── */
+    #devops { grid-area: devops; }
+
+    .tool-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .tool-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.65rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .tool-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--neon-green);
+      text-shadow: 0 0 6px #39ff1466;
+    }
+
+    .tool-role {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .status-badge {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      background: #0a2010;
+      border: 1px solid #39ff1444;
+      color: var(--neon-green);
+      flex-shrink: 0;
+    }
+
+    /* ── Incident Ledger ──────────────────────────────────────────────── */
+    #incidents { grid-area: incidents; }
+
+    .incident-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .incident-card {
+      background: var(--bg-card);
+      border: 1px solid #3a1010;
+      border-left: 3px solid #ff2e2e;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+    }
+
+    .incident-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .incident-id {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #ff4e4e;
+      letter-spacing: 0.1em;
+    }
+
+    .incident-status {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.12rem 0.45rem;
+      border-radius: 3px;
+      background: #0f2a10;
+      border: 1px solid #39ff1444;
+      color: var(--neon-green);
+    }
+
+    .incident-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+      margin-bottom: 0.3rem;
+    }
+
+    .incident-resolution {
+      font-size: 0.7rem;
+      color: #3a8a4a;
+      font-style: italic;
+    }
+
+    /* ── Cross-nav button ─────────────────────────────────────────────── */
+    .cross-nav {
+      text-align: center;
+      margin: 2rem 1.25rem 0;
+    }
+
+    .cross-nav-btn {
+      display: inline-block;
+      padding: 0.65rem 1.6rem;
+      background: transparent;
+      border: 1.5px solid var(--neon-amber);
+      border-radius: 6px;
+      color: var(--neon-amber);
+      text-decoration: none;
+      font-family: inherit;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: 0 0 10px #ffaa0040;
+      transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    }
+
+    .cross-nav-btn:hover {
+      background: #ffaa0015;
+      box-shadow: 0 0 20px #ffaa0066;
+      color: #ffc840;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+    }
+
+    footer a {
+      color: var(--neon-cyan);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Scanline overlay (aesthetic) ─────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.04) 3px,
+        rgba(0,0,0,0.04) 4px
+      );
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────────────────────────── -->
+  <header>
+    <div class="os-logo">SOVEREIGN OS</div>
+    <div class="os-sub">Operator Interface &nbsp;·&nbsp; v1.0.0</div>
+  </header>
+
+  <!-- ── MAIN GRID ───────────────────────────────────────────────────── -->
+  <main class="grid" id="main-grid">
+
+    <!-- Operator Profile -->
+    <section class="panel" id="profile" aria-label="Operator Profile">
+      <h2 class="panel-title">Operator Profile</h2>
+      <div class="profile-inner">
+        <div class="profile-avatar" aria-hidden="true">🛡</div>
+        <div class="profile-meta">
+          <div class="profile-handle" id="profile-handle">Guardian 82</div>
+          <div class="profile-role" id="profile-role">Sovereign Efficiency Architect</div>
+          <div class="profile-reloc">Relocation target: <span id="profile-reloc">Bakersfield</span></div>
+        </div>
+        <p class="profile-bio" id="profile-bio">
+          Systems-oriented operator specializing in automation architecture,
+          deployment pipelines, and gamified learning infrastructure.
+          Engineering-centric. Precision-focused.
+        </p>
+        <ul class="tag-list" id="tag-list" aria-label="Skill tags"></ul>
+      </div>
+    </section>
+
+    <!-- Constellation Map -->
+    <section class="panel" id="map" aria-label="Constellation Map">
+      <h2 class="panel-title">Constellation Map</h2>
+      <svg id="constellation-svg" viewBox="0 0 700 320" preserveAspectRatio="xMidYMid meet" aria-label="Node map" role="img">
+        <defs>
+          <filter id="glow-c">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-p">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- Edges and nodes are rendered by JS -->
+      </svg>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#00f5ff;box-shadow:0 0 6px #00f5ff;"></div>
+          <span>Hub</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#b24bff;box-shadow:0 0 6px #b24bff;"></div>
+          <span>Game</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#ffaa00;box-shadow:0 0 6px #ffaa00;"></div>
+          <span>Mystery</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DevOps Spine -->
+    <section class="panel" id="devops" aria-label="DevOps Spine">
+      <h2 class="panel-title">DevOps Spine</h2>
+      <ul class="tool-list" id="tool-list" aria-label="Toolchain"></ul>
+    </section>
+
+    <!-- Incident Ledger -->
+    <section class="panel" id="incidents" aria-label="Incident Ledger">
+      <h2 class="panel-title">Incident Ledger</h2>
+      <ul class="incident-list" id="incident-list" aria-label="Incidents"></ul>
+    </section>
+
+  </main>
+
+  <!-- Cross-navigation to Amazing Grace -->
+  <div class="cross-nav">
+    <a href="../amazing-grace/index.html" class="cross-nav-btn">🏠 Amazing Grace: Rooms for Rent in Largo &amp; Florida</a>
+  </div>
+
+  <footer>
+    <p>
+      Sovereign OS &nbsp;·&nbsp; Guardian 82 &nbsp;·&nbsp;
+      <a href="config.json" download>Download Config</a>
+    </p>
+  </footer>
+
+  <!-- ── DATA & RENDER SCRIPT ────────────────────────────────────────── -->
+  <script>
+    /* ------------------------------------------------------------------ *
+     *  Config — identical to config.json (inline for offline operation)  *
+     * ------------------------------------------------------------------ */
+    const CONFIG = {
+      meta: {
+        schema_version: "1.0.0",
+        generated: "2026-04-06",
+        engine: "Sovereign OS Deployment Engine"
+      },
+      identity: {
+        handle: "Guardian 82",
+        role: "Sovereign Efficiency Architect",
+        relocation_target: "Bakersfield",
+        bio: "Systems-oriented operator specializing in automation architecture, deployment pipelines, and gamified learning infrastructure. Engineering-centric. Precision-focused.",
+        tags: ["automation", "deployment", "google-apps-script", "google-sites", "gamified-learning"]
+      },
+      constellation_nodes: [
+        { id: "tampa-hq",      label: "Tampa HQ",     type: "hub",     purpose: "Primary origin point / home shard",  coords: { x: 0.50, y: 0.50 } },
+        { id: "matrix-shard",  label: "Matrix Shard", type: "game",    purpose: "Arcade engine module",               coords: { x: 0.28, y: 0.30 } },
+        { id: "neon-leap",     label: "Neon Leap",    type: "game",    purpose: "Secondary game module",              coords: { x: 0.72, y: 0.28 } },
+        { id: "seven-stars",   label: "Seven Stars",  type: "mystery", purpose: "Narrative anchor / lore node",       coords: { x: 0.50, y: 0.75 } },
+        { id: "manilla-b06",   label: "Manilla B06",  type: "hub",     purpose: "Remote operations gateway",          coords: { x: 0.82, y: 0.62 } }
+      ],
+      constellation_edges: [
+        { from: "tampa-hq", to: "matrix-shard" },
+        { from: "tampa-hq", to: "neon-leap"    },
+        { from: "tampa-hq", to: "seven-stars"  },
+        { from: "tampa-hq", to: "manilla-b06"  },
+        { from: "matrix-shard", to: "neon-leap"    },
+        { from: "neon-leap",    to: "manilla-b06"  }
+      ],
+      devops_spine: [
+        { tool: "Apps Script",  role: "Automation logic",        status: "active" },
+        { tool: "Google Sites", role: "UI architecture",         status: "active" },
+        { tool: "Admin Toolbox",role: "Diagnostics",             status: "active" },
+        { tool: "Master Shard", role: "Resume master document",  status: "active" }
+      ],
+      incident_ledger: [
+        {
+          id: "FI-RED",
+          status: "Bypassed",
+          severity: "high",
+          description: "Google Fi redirect loop detected. Legacy routing purged.",
+          resolution: "Legacy routing table cleared; direct path restored."
+        }
+      ]
+    };
+
+    /* ------------------------------------------------------------------ *
+     *  Helpers                                                            *
+     * ------------------------------------------------------------------ */
+    const $ = id => document.getElementById(id);
+    const svgNS = "http://www.w3.org/2000/svg";
+
+    function svgEl(tag, attrs = {}) {
+      const el = document.createElementNS(svgNS, tag);
+      for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+      return el;
+    }
+
+    const nodeColor = { hub: "#00f5ff", game: "#b24bff", mystery: "#ffaa00" };
+
+    /* ------------------------------------------------------------------ *
+     *  Operator Profile                                                   *
+     * ------------------------------------------------------------------ */
+    function renderProfile(identity) {
+      $("profile-handle").textContent = identity.handle;
+      $("profile-role").textContent   = identity.role;
+      $("profile-reloc").textContent  = identity.relocation_target;
+      $("profile-bio").textContent    = identity.bio;
+
+      const tagList = $("tag-list");
+      identity.tags.forEach(tag => {
+        const li = document.createElement("li");
+        li.className = "tag";
+        li.textContent = tag;
+        tagList.appendChild(li);
+      });
+    }
+
+    /* ------------------------------------------------------------------ *
+     *  Constellation Map (SVG)                                            *
+     *  Uses fixed viewBox coordinates (700×320) so layout is correct     *
+     *  regardless of when JS runs relative to CSS paint.                 *
+     * ------------------------------------------------------------------ */
+    function renderConstellation(nodes, edges) {
+      const svg = $("constellation-svg");
+      // Fixed dimensions matching the viewBox — no clientWidth dependency
+      const W = 700;
+      const H = 320;
+      const PAD = 48;
+
+      // Build id → position map
+      const pos = {};
+      nodes.forEach(n => {
+        pos[n.id] = {
+          x: PAD + n.coords.x * (W - PAD * 2),
+          y: PAD + n.coords.y * (H - PAD * 2)
+        };
+      });
+
+      // Background stars — deterministic positions using a simple LCG
+      // so the star field is stable across page loads
+      const starGroup = svgEl("g", { opacity: "0.5" });
+      let seed = 42;
+      function lcg() { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; }
+      for (let i = 0; i < 60; i++) {
+        const r = lcg() * 1.2 + 0.3;
+        const star = svgEl("circle", {
+          cx: (lcg() * W).toFixed(1),
+          cy: (lcg() * H).toFixed(1),
+          r: r.toFixed(2),
+          fill: "white",
+          opacity: (lcg() * 0.5 + 0.2).toFixed(2)
+        });
+        starGroup.appendChild(star);
+      }
+      svg.appendChild(starGroup);
+
+      // Edges
+      const edgeGroup = svgEl("g");
+      edges.forEach(e => {
+        const a = pos[e.from], b = pos[e.to];
+        if (!a || !b) return;
+        const line = svgEl("line", {
+          x1: a.x.toFixed(1), y1: a.y.toFixed(1),
+          x2: b.x.toFixed(1), y2: b.y.toFixed(1),
+          stroke: "#1e3060",
+          "stroke-width": "1",
+          "stroke-dasharray": "4 3"
+        });
+        edgeGroup.appendChild(line);
+      });
+      svg.appendChild(edgeGroup);
+
+      // Nodes
+      nodes.forEach(n => {
+        const { x, y } = pos[n.id];
+        const color = nodeColor[n.type] || "#ffffff";
+        const isHub = n.type === "hub";
+        const r = isHub ? 10 : 7;
+
+        const g = svgEl("g", { class: "node-group", "data-id": n.id });
+
+        // Outer pulse ring
+        const ring = svgEl("circle", {
+          cx: x.toFixed(1), cy: y.toFixed(1), r: r + 6,
+          fill: "none",
+          stroke: color,
+          "stroke-width": "1",
+          opacity: "0.3"
+        });
+
+        // Main circle
+        const circle = svgEl("circle", {
+          cx: x.toFixed(1), cy: y.toFixed(1), r,
+          fill: color,
+          filter: isHub ? "url(#glow-c)" : "url(#glow-p)",
+          opacity: "0.9"
+        });
+
+        // Label — position below or above to avoid edge overlap
+        const labelY = y > H * 0.7 ? y - r - 8 : y + r + 14;
+        const label = svgEl("text", {
+          x: x.toFixed(1), y: labelY.toFixed(1),
+          "text-anchor": "middle",
+          class: "node-label"
+        });
+        label.textContent = n.label;
+
+        // Tooltip via title element
+        const titleEl = svgEl("title");
+        titleEl.textContent = `${n.label} — ${n.purpose}`;
+
+        g.appendChild(titleEl);
+        g.appendChild(ring);
+        g.appendChild(circle);
+        g.appendChild(label);
+        svg.appendChild(g);
+      });
+    }
+
+    /* ------------------------------------------------------------------ *
+     *  DevOps Spine                                                       *
+     * ------------------------------------------------------------------ */
+    function renderDevOps(spine) {
+      const list = $("tool-list");
+      spine.forEach(item => {
+        const li = document.createElement("li");
+        li.className = "tool-item";
+        li.innerHTML = `
+          <div>
+            <div class="tool-name">${escapeHtml(item.tool)}</div>
+            <div class="tool-role">${escapeHtml(item.role)}</div>
+          </div>
+          <span class="status-badge">${escapeHtml(item.status)}</span>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    /* ------------------------------------------------------------------ *
+     *  Incident Ledger                                                    *
+     * ------------------------------------------------------------------ */
+    function renderIncidents(ledger) {
+      const list = $("incident-list");
+      ledger.forEach(inc => {
+        const li = document.createElement("li");
+        li.className = "incident-card";
+        li.innerHTML = `
+          <div class="incident-header">
+            <span class="incident-id">${escapeHtml(inc.id)}</span>
+            <span class="incident-status">${escapeHtml(inc.status)}</span>
+          </div>
+          <p class="incident-desc">${escapeHtml(inc.description)}</p>
+          <p class="incident-resolution">↳ ${escapeHtml(inc.resolution)}</p>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    /* ------------------------------------------------------------------ *
+     *  Security: HTML escape for user-derived data inserted via innerHTML *
+     * ------------------------------------------------------------------ */
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    /* ------------------------------------------------------------------ *
+     *  Bootstrap                                                          *
+     * ------------------------------------------------------------------ */
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProfile(CONFIG.identity);
+      renderConstellation(CONFIG.constellation_nodes, CONFIG.constellation_edges);
+      renderDevOps(CONFIG.devops_spine);
+      renderIncidents(CONFIG.incident_ledger);
+    });
+  </script>
+</body>
+</html>
